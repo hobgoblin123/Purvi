@@ -52,13 +52,61 @@ Purvi makes every token count by pointing the AI in the right direction before i
 
 As models get more capable, this matters more, not less. A smarter model that builds the wrong thing just builds the wrong thing faster.
 
+## Setting up Purvi on your LLM
+
+Purvi works by hooking into your AI assistant's session lifecycle — loading the checklist when you start working, and reviewing it when you wrap up. Here's how to set it up.
+
+### Step 1 — Fork and clone
+
+```bash
+# Fork this repo on GitHub, then:
+git clone https://github.com/<your-username>/Purvi.git ~/Purvi
+```
+
+Put it wherever makes sense for your setup. The path just needs to be consistent — your skills will reference it.
+
+### Step 2 — Wire into your session start
+
+Your AI assistant needs to load `checklist.md` at the start of every session. How you do this depends on your tool:
+
+**Claude Code** — Edit your `gain-context` skill (or equivalent session-start skill) to add a step that reads `~/Purvi/checklist.md` into context. The "Before building" section is what matters at session start. See `Dependencies/skills/gain-context.md` for a reference implementation.
+
+**Other LLMs** — If your tool supports custom instructions, system prompts, or skills, add a rule: "At session start, read `~/Purvi/checklist.md` and keep the 'Before building' items in mind for this session."
+
+### Step 3 — Wire into your session wrap-up
+
+When you finish a session, the checklist's "After building" and "Wrapping a sync" sections should run. This is where reflection happens — did something go wrong? Is there a principle worth capturing?
+
+**Claude Code** — Edit your `update-context` skill to add a step before the final confirmation that reads `~/Purvi/checklist.md` and checks the "After building" items. See `Dependencies/skills/update-context.md` for a reference implementation (look for "Step 6 — Purvi product checklist").
+
+**Other LLMs** — Add a wrap-up rule: "Before closing, check `~/Purvi/checklist.md` 'After building' section. Flag anything relevant."
+
+### Step 4 — Start using it
+
+The loop works like this:
+
+1. **Start a session** → checklist loads → you build with the right lens
+2. **Something goes wrong** → you ask "what could you do better next time?"
+3. **The reflection produces a principle** → add it to `Janmam.md`
+4. **If it's actionable** → add it to `checklist.md`
+5. **Wrap up** → the checklist catches anything you missed
+6. **Next session** → the improved checklist loads → repeat
+
+Run product syncs (`Product sync/` folder) periodically to capture patterns from multiple sessions. The sync notes are the raw material; Janmam is the distilled output.
+
+### Step 5 — Make it yours
+
+Purvi is a starting point, not a prescription. The principles in Janmam came from one person's workflow — yours will be different. Delete what doesn't apply, add what does. The structure (checklist → principles → sync notes → feedback loop) is the valuable part, not the specific entries.
+
+**Ground truths are local.** Things like auth paths, server configs, and tool setups are facts about *your* environment. Store those in your local skills database, not in this repo. The repo documents the *principle* ("check what's already in place"); the *facts* live locally.
+
+## Dependencies
+
+The `Dependencies/skills/` folder contains reference snapshots of skills that Purvi integrates with. These are copies — the live versions evolve independently. Use them to understand how Purvi hooks into a session lifecycle, then adapt to your own setup.
+
 ## Status
 
 Early stage. The principles and checklists grow with every product conversation. Nothing here is hypothetical — every entry comes from a real session where something was built, something went wrong, and something was learned.
-
-## Want to use this?
-
-Purvi is designed for anyone working with AI coding assistants. Drop the checklist into your workflow, reference Janmam when you're not sure if the AI understood you, and run a product sync when you notice patterns worth capturing.
 
 ## License
 

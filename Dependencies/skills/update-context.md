@@ -239,6 +239,16 @@ _Pending work as of YYYY-MM-DD HH:MM IST_
 - **Clear when resolved** — if the current session completed everything in a prior NEXT.md, delete the file as part of this step. Don't leave stale resumption notes around to mislead future sessions.
 - **NEXT.md is not history** — once cleared, it's gone. The narrative of what was once pending lives in the daily logs.
 
+## Step 6 — Purvi product checklist (if Purvi is set up)
+
+If `/root/Purvi/checklist.md` exists (or the user's configured Purvi path), read it and run through the "After building" and "Wrapping a sync" sections silently. Surface only items that are relevant and NOT yet addressed in this session:
+
+- **Reflection** — Did something go wrong? Is there a reusable principle worth adding to Janmam?
+- **Sync notes** — Did this session surface a new pattern or principle? If so, note it for the next product sync.
+- **To-do review** — Are there open to-do's from today's sync notes (`Product sync/` folder) that were addressed this session? Mark them done.
+
+If nothing is flagged, skip silently — don't mention the checklist. If something is flagged, surface it as a brief note in the confirmation summary (e.g., "Purvi: this session surfaced a pattern worth syncing — consider a product sync.").
+
 ## Confirming before exit
 
 After all updates, send a brief summary to the user listing:

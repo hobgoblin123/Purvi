@@ -1,31 +1,64 @@
 # Purvi
 
-A skill set that teaches AI assistants to think like product managers — so every token goes toward building the right thing.
+Purvi is a product management toolkit for AI coding assistants. It helps them build the right thing — not just build things right.
 
-## Why this exists
+## The problem
 
-AI models are going to get a whole lot worse before they get better than before. Context windows will grow, capabilities will fluctuate, and the cost of wasted reasoning will compound. The models that appear to work today often burn tokens on the wrong path — building features nobody asked for, duplicating what already exists, solving problems that weren't the problem.
+AI coding assistants are great at writing code. But they're terrible at knowing *what* to write. Ask one to "make this editable" and it'll happily build a feature that already exists somewhere else. Ask it to "add a toggle" and it'll over-engineer a whole new component when three lines would do. The code works. It just wasn't what you needed.
 
-**Purvi is a bet on token prioritization.** Instead of waiting for models to figure out product thinking on their own, encode it into skills — structured prompts that force the right questions before the first line of code. A model guided by Purvi spends tokens on understanding the user, clarifying the value, and validating the approach. Not on backtracking after building the wrong thing.
+Every wrong turn burns tokens — the AI's thinking budget. Wasted tokens mean wasted time, wasted money, and wasted back-and-forth where you explain what you actually meant.
 
-This is a step ahead of the curve. When models regress, the skills hold the line. When models improve, the skills become a multiplier.
+## The idea
 
-## What Purvi is
+What if the AI asked the right questions *before* writing code?
 
-A collection of standalone skills for AI coding assistants (Claude Code, Copilot CLI, and others) that cover the product side of building software:
+That's what Purvi does. It's a set of principles and checklists — born from real product conversations — that teach AI assistants to think like a product manager. Before building anything, check: Does this already exist? What new value does this add? Am I solving the right problem?
 
-- **Understanding what to build** — before jumping to implementation
-- **Clarifying value** — if a feature duplicates something that exists, it's the wrong feature
-- **Scoping ruthlessly** — what's the smallest thing that delivers the outcome
-- **Thinking from the user's seat** — not the developer's
+## How it works
+
+Purvi has three parts:
+
+### 1. Checklist (`checklist.md`)
+
+A simple list of questions to run through before, during, and after building anything. Things like:
+
+- Does this add something new, or am I duplicating an existing feature?
+- Am I designing for mobile first?
+- If I can't see the result, am I saying so instead of pretending it works?
+
+### 2. Janmam (`Janmam.md`)
+
+A running list of principles. Each one traces back to a real conversation where something went wrong, and the reflection that followed. Not theory — lessons learned the hard way.
+
+For example: *"If someone says 'I like how X works,' they mean the interaction style, not 'build an exact copy of X.'"* That came from a real session where the AI cloned a 3-field edit form when the user wanted a full 7-field editor.
+
+### 3. Product sync notes (`Product sync/`)
+
+Dated notes from product conversations. This is where new principles are born. The pattern looks like this:
+
+1. Something goes wrong during a build
+2. The user asks: "What could you do better next time?"
+3. The reflection produces a principle
+4. The principle goes into Janmam
+5. If it's actionable, it becomes a checklist item
+
+The sync notes are the raw material. Janmam is the refined output. The checklist is the daily tool.
+
+## Why "token prioritization"?
+
+AI models have a thinking budget (tokens). Today's models often spend that budget on the wrong things — building before understanding, guessing instead of asking, reworking instead of getting it right the first time.
+
+Purvi makes every token count by pointing the AI in the right direction before it starts working. One good question at the start saves hundreds of lines of wasted code.
+
+As models get more capable, this matters more, not less. A smarter model that builds the wrong thing just builds the wrong thing faster.
 
 ## Status
 
-Early stage. The skill set is being developed iteratively — each skill born from a real gap observed in AI-assisted product development.
+Early stage. The principles and checklists grow with every product conversation. Nothing here is hypothetical — every entry comes from a real session where something was built, something went wrong, and something was learned.
 
-## Philosophy
+## Want to use this?
 
-The best product managers don't write code. They make sure the right code gets written. Purvi does the same for AI — it doesn't replace the model's coding ability, it directs it. One well-placed question saves a thousand tokens of rework.
+Purvi is designed for anyone working with AI coding assistants. Drop the checklist into your workflow, reference Janmam when you're not sure if the AI understood you, and run a product sync when you notice patterns worth capturing.
 
 ## License
 

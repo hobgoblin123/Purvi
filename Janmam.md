@@ -38,3 +38,15 @@ Running principles born from product syncs. Reference this before building anyth
 **The principle:** Mobile is the default lens, not a follow-up check. Design for the smallest screen first. If it works on mobile, it works everywhere. If you only checked desktop, you checked half the product.
 
 **How to apply:** Every UI change starts with "how does this look on a phone?" before "how does this look on a monitor?"
+
+---
+
+## 08-06-2026 — Ground truth check
+
+**What happened:** Needed GitHub auth to create a repo. Installed `gh` CLI, asked the user to authenticate interactively — then discovered credentials were already stored in a git credential file. The answer was already there. We just didn't check.
+
+**The principle:** Before setting up anything, check what's already in place. When you discover something critical, write it down immediately. Knowledge that isn't written down isn't knowledge — it's a landmine waiting to waste someone's time.
+
+**The rule:** If it's ambiguous, don't send it. The goal is zero ambiguity in everything — code, communication, documentation. If something could be misunderstood, unclear, or forgotten, make it explicit before moving on.
+
+**How to apply:** Before any setup or configuration step, ask "is this already done?" Before moving on from any discovery, ask "will I or someone else need this again?" If yes, write it down now, not later.

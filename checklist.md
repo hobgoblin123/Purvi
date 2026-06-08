@@ -4,7 +4,7 @@ Run through this on every product sync and every session wrap-up (update-context
 
 ## Before building
 
-- [ ] **Ground truth check** — Before setting up, connecting, or configuring anything, check what's already in place. Before moving on from a discovery, write it down. If it's ambiguous, don't send it.
+- [ ] **Ground truth check** — Before setting up, connecting, or configuring anything, check what's already in place. Before moving on from a discovery, write it down. If it's ambiguous, don't send it. Ground truths are environment-specific — store them in the local skills database, not in shared repos.
 - [ ] **Value check** — Does this add a new capability? If it already exists somewhere, you're misunderstanding the ask.
 - [ ] **One clarifying question** — State what you think the user wants in one sentence. If you're not sure, ask before writing code.
 - [ ] **"I like X" = the pattern, not the scope** — When someone references an existing feature, they mean the interaction model, not "clone it."

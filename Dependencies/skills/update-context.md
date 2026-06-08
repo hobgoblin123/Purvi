@@ -239,54 +239,83 @@ _Pending work as of YYYY-MM-DD HH:MM IST_
 - **Clear when resolved** — if the current session completed everything in a prior NEXT.md, delete the file as part of this step. Don't leave stale resumption notes around to mislead future sessions.
 - **NEXT.md is not history** — once cleared, it's gone. The narrative of what was once pending lives in the daily logs.
 
-## Step 6 — Purvi product sync (if Purvi is set up)
+## Step 6 — Purvi product sync (optional, user-driven)
 
-If `/root/Purvi/checklist.md` does not exist, skip this step entirely. Otherwise, run a product sync — this is not a passive check, it's an active write loop that updates the Purvi repo.
+**Skip this step entirely if:**
+- `/root/Purvi/checklist.md` does not exist (Purvi not set up on this machine)
+- The context window is tight (conversation has been compressed or is near limit) — prioritise Steps 1–5 over this step
 
-**Purvi repo path:** `/root/Purvi/` (or the user's configured path).
+**Purvi repo path:** `/root/Purvi/` (or the user's configured path). This is a ground truth — each machine has its own path. The skill checks existence, not a hardcoded location.
 
-### 6a — Read the checklist and the current sync file
+### 6a — Assess and ask
 
-1. Read `/root/Purvi/checklist.md`.
-2. Determine today's sync file: `/root/Purvi/Product sync/DD-MM-YYYY.md` (date from Step 1, reformatted to DD-MM-YYYY).
-3. If the file exists, read it to see what's already there (to-do's, prior syncs today). If it doesn't exist, it will be created in 6b.
+Silently scan the session for signals worth syncing:
+- Was there a wasted round, a misunderstanding, or a feature built wrong before being corrected?
+- Did a new pattern, principle, or decision emerge from the conversation?
+- Were any existing to-do's from the Purvi sync file addressed?
 
-### 6b — Run the "After building" checklist against this session
+**If nothing worth noting:** skip the rest of Step 6 entirely. Do not mention Purvi, do not create empty entries, do not comment. Silence means "clean session, nothing to sync."
 
-Walk through each item in the checklist's "After building" section. For each item that fires:
+**If something worth noting:** ask the user conversationally — e.g.:
 
-**Reflection** — Did something go wrong this session? Was there a wasted round, a misunderstanding, a feature built wrong before being corrected? If yes:
-1. Write the principle to `/root/Purvi/Janmam.md` using the existing format (date heading, "What happened", "The principle", "How to apply").
-2. If the principle is actionable as a gate, add it to the appropriate section in `/root/Purvi/checklist.md`.
+> "This session surfaced [brief description]. Want to run a quick Purvi sync before wrapping?"
 
-**Sync notes** — Did this session surface a new pattern, a decision, or a discussion worth recording? If yes:
-1. Append to today's sync file (`/root/Purvi/Product sync/DD-MM-YYYY.md`). If the file already has content from an earlier sync today, append with a `---` separator and a `## Sync — HH:MM` subheading.
-2. If the file doesn't exist, create it with `# DD-MM-YYYY` heading and `## Sync — HH:MM` subheading.
-3. Write the discussion points, decisions, and any new principles identified.
+On **no** or no response, skip. On **yes**, proceed to 6b.
 
-If nothing fired (clean session, no new patterns, no mistakes), write a minimal sync entry: date, time, one line saying what was built, "No new patterns identified." Even clean sessions get logged — the absence of issues is data.
+### 6b — Sync local copy
 
-### 6c — Review to-do's
+Before writing anything, ensure the local Purvi repo is up to date:
 
-1. Read today's sync file for any open to-do items (`- [ ]` lines).
-2. If any were completed this session, mark them done (`- [x] ~~...~~`).
-3. If the session created new to-do's (open questions, deferred work, things to follow up), add them to the to-do list at the bottom of today's sync file.
-4. Surface open to-do's to the user in the confirmation summary.
+```bash
+cd /root/Purvi && git pull --ff-only 2>&1
+```
 
-### 6d — Commit and push to Purvi
+If the pull fails (conflict, auth issue), report the error and skip the rest of Step 6. Do not force-push or overwrite.
+
+### 6c — Present findings for review
+
+Read today's sync file if it exists: `/root/Purvi/Product sync/DD-MM-YYYY.md` (date from Step 1, reformatted to DD-MM-YYYY).
+
+Present what you think should be written — **do not write yet.** Show the user:
+
+1. **Sync notes draft** — what you'd add to today's sync file (patterns, decisions, discussion points)
+2. **Janmam draft** (only if a new principle emerged) — the principle in Janmam format (date, "What happened", "The principle", "How to apply")
+3. **Checklist change** (only if a new actionable gate emerged) — the item you'd add and which section
+4. **To-do updates** — any open to-do's from the sync file that were completed this session, and any new to-do's from this session
+
+The user reviews and approves, modifies, or rejects each item. Only write what's approved. If the user says nothing is worth writing, stop — no entries, no commits.
+
+### 6d — Write approved changes and push
+
+Write only the approved items:
+- Sync notes → append to `/root/Purvi/Product sync/DD-MM-YYYY.md` (create if needed, append with `---` separator and `## Sync — HH:MM` subheading if same-day)
+- Janmam → append to `/root/Purvi/Janmam.md`
+- Checklist → edit `/root/Purvi/checklist.md`
+- To-do's → update in today's sync file
+
+Then commit and push:
 
 ```bash
 cd /root/Purvi && git add -A && git diff --cached --quiet || (git commit -m "<short summary of sync changes>" && git push)
 ```
 
-If there are no changes to commit, skip silently. If the push fails, report the error — do not claim success.
+If there are no changes, skip silently. If the push fails, report the error — do not claim success.
+
+### 6e — Clean up stale content
+
+During the same pass, scan for stale items:
+- Checklist items that are no longer relevant or have been superseded → flag to user for removal
+- To-do items that are clearly outdated → flag to user for removal
+
+Do not delete without confirmation. Present what you'd remove and why.
 
 ### What NOT to do in this step
 
-- Don't ask the user whether to run the sync. It runs automatically as part of update-context.
-- Don't echo the full checklist to the user. The checklist is an internal gate, not a conversation piece.
-- Don't create a sync entry that just restates the daily log. The sync captures *patterns and principles*, not a narrative of what was built. If the session was routine with no new insights, the minimal entry is enough.
-- Don't run the "Before building" or "During building" checklist items — those are for session start (gain-context), not wrap-up.
+- **Don't write without approval.** No auto-entries to Janmam, checklist, or sync notes. Every write is user-approved.
+- **Don't create noise.** If the session has nothing worth syncing, stay silent. No "no new patterns" entries.
+- **Don't echo the checklist.** The checklist is an internal assessment tool, not conversation output.
+- **Don't run a full sync loop.** This is not the "Assembly dispersed" pattern — that's a separate, dedicated product sync conversation. This step is a lightweight check at wrap-up. The distinction between automated wrap-up checks and dedicated sync sessions is an open design question.
+- **Don't run the "Before building" or "During building" checklist items** — those are for session start (gain-context), not wrap-up.
 
 ## Confirming before exit
 

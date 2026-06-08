@@ -52,3 +52,13 @@ Running principles born from product syncs. Reference this before building anyth
 **Corner case — ground truths are local, not universal.** What's true on one machine won't be true on another. GitHub auth living at `/root/github-backup/.git-credentials` is a fact about *this* server, not a portable rule. Ground truths must be stored in the local skills database (e.g., `/root/.claude/skills/`) where they're loaded in context for the environment they describe. Putting them in a shared repo makes them look universal when they're not — different environments have different auth, different paths, different toolchains.
 
 **How to apply:** Before any setup or configuration step, ask "is this already done?" Before moving on from any discovery, ask "will I or someone else need this again?" If yes, write it down — but write it *locally* (in the skills database) if it's environment-specific, not in a shared repo where it'll mislead a different setup.
+
+---
+
+## 08-06-2026 — Clarify before closing
+
+**What happened:** Questions raised mid-sync were carried out silently — not answered, not explicitly deferred. Silent unknowns leak out of syncs and get lost.
+
+**The principle:** Every question raised during a sync must be resolved before the sync ends. The only exception is an explicit deferral — "we'll clarify that later." If it wasn't said, it wasn't deferred, and it needs an answer now.
+
+**How to apply:** Before wrapping any sync, scan back for unanswered questions. If one exists, surface it. Don't close with silent unknowns.

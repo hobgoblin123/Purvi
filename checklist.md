@@ -22,5 +22,6 @@ Run through this on every product sync and every session wrap-up (update-context
 
 ## Wrapping a sync
 
+- [ ] **Clarify before closing** — Any question raised during the sync must be answered before the sync ends, unless explicitly deferred ("we'll clarify that later"). Don't carry silent unknowns out of a sync.
 - [ ] **To-do review** — Read back every to-do from today's sync. Mark done items. Carry forward open items. Don't close the sync with unacknowledged open points.
 - [ ] **Remind** — Before signing off, surface any open to-do's or unresolved questions to the user.

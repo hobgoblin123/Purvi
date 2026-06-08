@@ -79,6 +79,17 @@ NEXT.md is the prior session's resumption checklist (written by `update-context`
 
 Do not echo the ground truths or checklist to the user — just load them silently.
 
+**If Purvi is not found** — tell the user: "Purvi is not installed on this machine. Product quality gates won't load this session." One line, then continue with the rest of the skill as normal.
+
+**Skill diff check** — If ground truths has a `Skill diff check frequency` and a `Last skill diff check` date, check if a diff is due based on the frequency (daily/weekly/monthly/yearly/never). If due:
+
+1. Compare each file in `<purvi-path>/Dependencies/skills/` against the corresponding live skill file (matching by filename → skill name → `~/.claude/skills/<name>/SKILL.md` or plugin cache path).
+2. If any differ, tell the user: "Skill snapshots in Purvi are out of date: [list changed skills]. Update the snapshots?"
+3. On yes, copy the live versions to `Dependencies/skills/`, commit, push.
+4. Update `Last skill diff check` in ground truths to today's date.
+
+If frequency is `never`, skip entirely. If not due yet, skip silently. Don't block on it.
+
 If the user said "Start Session" (rather than naming a specific project), resolve the project from context as usual (Step 1), then load the project README, ground truths, and Purvi checklist. "Start Session" is an alias for "gain context + load product gates."
 
 ### Step 5 — Confirm to the user

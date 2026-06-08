@@ -98,7 +98,38 @@ Run product syncs (`Product sync/` folder) periodically to capture patterns from
 
 Purvi is a starting point, not a prescription. The principles in Janmam came from one person's workflow — yours will be different. Delete what doesn't apply, add what does. The structure (checklist → principles → sync notes → feedback loop) is the valuable part, not the specific entries.
 
-**Ground truths are local.** Things like auth paths, server configs, and tool setups are facts about *your* environment. Store those in your local skills database, not in this repo. The repo documents the *principle* ("check what's already in place"); the *facts* live locally.
+## Ground truths — your `.env` file
+
+Ground truths are device-specific operational facts: auth paths, service configs, credential locations, installed tools, port numbers. They're the equivalent of a `.env` file — local to the machine, never committed to a shared repo.
+
+**Why separate?** Purvi documents *principles* ("check what's already in place before setting up"). Ground truths hold *facts* ("GitHub auth is at `/path/to/credentials`"). The principle is universal. The facts are not. Mixing them makes the facts look portable when they aren't, and the next person on a different machine acts on stale info.
+
+**Where to put them:** Create a `ground-truths.md` file in your local AI config directory (e.g., `~/.claude/ground-truths.md` for Claude Code). This file should:
+
+- **Never be committed** to any git repo — it's outside your project directories
+- **Never be backed up** to GitHub or any shared location
+- **Be loaded at session start** — wire your session-start skill (like `gain-context`) to read it into context
+- **Hold only environment-specific facts** — paths, auth, services, hardware. Not principles, not preferences, not project knowledge.
+
+Example structure:
+
+```markdown
+# Ground Truths
+
+## Auth
+- GitHub PAT: `/path/to/credentials`
+- API keys: `/path/to/.env`
+
+## Services
+- Backend: port 8000, systemd unit `my-backend.service`
+- Frontend: port 3000, WorkingDirectory=/path/to/app
+
+## Paths
+- Projects: `/home/user/projects/`
+- AI skills: `~/.claude/skills/`
+```
+
+The relationship between Purvi and ground truths is the same as code to `.env`: the code says "read the config from the environment"; the `.env` says what the config actually is on *this* machine.
 
 ## Dependencies
 

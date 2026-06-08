@@ -49,9 +49,14 @@ Running principles born from product syncs. Reference this before building anyth
 
 **The rule:** If it's ambiguous, don't send it. The goal is zero ambiguity in everything — code, communication, documentation. If something could be misunderstood, unclear, or forgotten, make it explicit before moving on.
 
-**Corner case — ground truths are local, not universal.** What's true on one machine won't be true on another. GitHub auth living at `/root/github-backup/.git-credentials` is a fact about *this* server, not a portable rule. Ground truths must be stored in the local skills database (e.g., `/root/.claude/skills/`) where they're loaded in context for the environment they describe. Putting them in a shared repo makes them look universal when they're not — different environments have different auth, different paths, different toolchains.
+**Ground truths are your `.env` file.** Device-specific operational facts — auth paths, service configs, installed tools, credential locations — are not portable knowledge. They belong in a local ground truths file (e.g., `~/.claude/ground-truths.md`) that is:
+- **Local only** — never committed to any shared repo, never backed up to GitHub
+- **Loaded at session start** — the gain-context skill reads it into context alongside the project README
+- **Per-machine** — each environment has its own copy with its own facts
 
-**How to apply:** Before any setup or configuration step, ask "is this already done?" Before moving on from any discovery, ask "will I or someone else need this again?" If yes, write it down — but write it *locally* (in the skills database) if it's environment-specific, not in a shared repo where it'll mislead a different setup.
+The shared repo (Purvi) documents the *principle* — "check what's already in place, write it down." The ground truths file holds the *facts*. This is the same relationship as code to `.env`: the code says "read the database URL from config"; the `.env` says what the URL actually is on this machine.
+
+**How to apply:** Before any setup or configuration step, ask "is this already done?" Before moving on from any discovery, ask "will I or someone else need this again?" If yes, and it's environment-specific, write it to the local ground truths file. If it's a universal principle, write it to Janmam. Never mix the two.
 
 ---
 

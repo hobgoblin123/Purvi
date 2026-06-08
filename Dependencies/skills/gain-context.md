@@ -71,13 +71,15 @@ Check `/root/projects_context/<project>/NEXT.md`.
 
 NEXT.md is the prior session's resumption checklist (written by `update-context`'s Step 6). Surfacing it ensures the user's next move is informed — either they want to resume the pending work, or they have a fresh ask but should at least know what's outstanding.
 
-### Step 4c — Load Purvi checklist (if Purvi is set up)
+### Step 4c — Load ground truths and Purvi checklist
 
-If `/root/Purvi/checklist.md` exists (or the user's configured Purvi path), read it into context alongside the project README. This loads the product quality gates so the session starts with the right lens.
+**Ground truths** — If `/root/.claude/ground-truths.md` exists, read it into context. This is the environment's `.env` — device-specific operational facts (paths, auth, services). It is local-only, never backed up or committed to any shared repo. Each machine has its own copy.
 
-Do not echo the checklist to the user — just load it silently. The "Before building" section is the one that matters at session start: ground truth check, value check, clarifying question, pattern vs scope.
+**Purvi checklist** — If the Purvi path from ground truths exists (or default `/root/Purvi/checklist.md`), read it into context alongside the project README. This loads the product quality gates so the session starts with the right lens. The "Before building" section is the one that matters at session start: ground truth check, value check, clarifying question, pattern vs scope.
 
-If the user said "Start Session" (rather than naming a specific project), resolve the project from context as usual (Step 1), then load both the project README and the Purvi checklist. "Start Session" is an alias for "gain context + load product gates."
+Do not echo the ground truths or checklist to the user — just load them silently.
+
+If the user said "Start Session" (rather than naming a specific project), resolve the project from context as usual (Step 1), then load the project README, ground truths, and Purvi checklist. "Start Session" is an alias for "gain context + load product gates."
 
 ### Step 5 — Confirm to the user
 

@@ -67,3 +67,13 @@ The shared repo (Purvi) documents the *principle* — "check what's already in p
 **The principle:** Every question raised during a sync must be resolved before the sync ends. The only exception is an explicit deferral — "we'll clarify that later." If it wasn't said, it wasn't deferred, and it needs an answer now.
 
 **How to apply:** Before wrapping any sync, scan back for unanswered questions. If one exists, surface it. Don't close with silent unknowns.
+
+---
+
+## 09-06-2026 — Don't assume, always check
+
+**What happened:** Asked whether git worktrees would help efficiency. Gave a confident answer listing benefits and edge cases — without checking the actual repos. User pushed back: "Don't assume always check and clarify." Inspecting the real state revealed hardcoded systemd paths, 288MB duplication per worktree, and missing secrets — real blockers that were missed.
+
+**The principle:** Never answer "will X work for us?" from general knowledge. Check the actual environment first. A tool that's great in general can be useless or harmful in a specific setup. This is ground truth applied to decision-making, not just setup.
+
+**How to apply:** When evaluating any tool, pattern, or approach — check the real state before recommending. Run the commands, read the configs, inspect the files. "It generally works well" is not an answer to "will it work here?"

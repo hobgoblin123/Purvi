@@ -87,3 +87,13 @@ The shared repo (Purvi) documents the *principle* — "check what's already in p
 **The principle:** Each context system has a job. Daily logs capture session narrative. Sync notes capture *patterns and principles* born from sessions — not the session itself. If a sync produced no new patterns, the sync file has nothing to add. Writing "here's what we did" in both places creates maintenance burden and dilutes signal.
 
 **How to apply:** Before writing sync notes, ask: "Is there anything here that the daily log doesn't already cover — a new principle, a pattern, a decision?" If no, skip. Sync notes earn their existence by distilling, not by echoing.
+
+---
+
+## 10-06-2026 — Verify findings before acting on them
+
+**What happened:** Ran a server security audit via parallel subagents. Three headline findings were false positives: a "expired" Tailscale key that wasn't (the field was `None`/disabled, not expired), "exposed" API docs that were actually gated (302/404 through nginx), and "unauthenticated" finance routes that nginx protects via `auth_request`. Each was wrong because it judged one layer in isolation.
+
+**The principle:** An audit or review finding is a hypothesis, not a fact. Before acting on it, reproduce it against the running system — especially for anything that spans layers (a proxy in front of an app, TLS terminating upstream, a config field that can mean "disabled"). Automated or delegated analysis sees fragments; the truth is in how the layers compose.
+
+**How to apply:** For each finding, reproduce it live before fixing — curl the actual URL, read the actual config, check the actual field value. If a fix's premise can't be reproduced, the finding is suspect. Judge the system, not the file. (Pairs with "Don't assume, always check.")

@@ -77,3 +77,13 @@ The shared repo (Purvi) documents the *principle* — "check what's already in p
 **The principle:** Never answer "will X work for us?" from general knowledge. Check the actual environment first. A tool that's great in general can be useless or harmful in a specific setup. This is ground truth applied to decision-making, not just setup.
 
 **How to apply:** When evaluating any tool, pattern, or approach — check the real state before recommending. Run the commands, read the configs, inspect the files. "It generally works well" is not an answer to "will it work here?"
+
+---
+
+## 09-06-2026 — Don't duplicate across context systems
+
+**What happened:** Product sync wrap-up was about to write sync notes that repeated everything already in the daily log. User caught it: "All of these contexts are there in claude_context daily log."
+
+**The principle:** Each context system has a job. Daily logs capture session narrative. Sync notes capture *patterns and principles* born from sessions — not the session itself. If a sync produced no new patterns, the sync file has nothing to add. Writing "here's what we did" in both places creates maintenance burden and dilutes signal.
+
+**How to apply:** Before writing sync notes, ask: "Is there anything here that the daily log doesn't already cover — a new principle, a pattern, a decision?" If no, skip. Sync notes earn their existence by distilling, not by echoing.

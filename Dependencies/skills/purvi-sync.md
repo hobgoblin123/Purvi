@@ -24,22 +24,23 @@ If pull fails, report the error. Continue with local state but warn the user tha
 Read into context (silently, don't echo):
 - `/root/Purvi/checklist.md`
 - `/root/Purvi/Janmam.md`
+- `/root/Purvi/flagged.md` — candidate patterns queued by automated wrap-ups
 - Today's sync file if it exists: `/root/Purvi/Product sync/DD-MM-YYYY.md`
 - The most recent sync file (if different from today) — to see what's still open
 
-### 2 — Surface open to-do's
+### 2 — Surface open to-do's and flagged patterns
 
-Check the most recent sync file for open to-do items (`- [ ]` lines). If any exist, surface them to the user:
+Check the most recent sync file for open to-do items (`- [ ]` lines), and `flagged.md` for queued candidate patterns. If any exist, surface them to the user:
 
-> "Open from last sync: [list items]. Want to review these first?"
+> "Open from last sync: [list items]. Flagged since then: [list flags]. Want to review these first?"
 
-Don't force it — if the user has something else to discuss, follow their lead.
+Every flagged pattern must be decided during this sync — promoted to Janmam/checklist or dropped — unless the user explicitly defers it. Don't force the ordering, though — if the user has something else to discuss, follow their lead and return to the flags before closing.
 
 ### 3 — Tell the user you're ready
 
 One line:
 
-> "Sync loaded. [N open to-do's / No open to-do's]. Go ahead."
+> "Sync loaded. [N open to-do's / No open to-do's, M flagged patterns / no flags]. Go ahead."
 
 ## During the sync
 
@@ -84,6 +85,9 @@ Show everything you'd write, grouped by file:
 
 **Checklist** (`checklist.md`) — only if new actionable gates emerged:
 > [Draft of each new item and which section it goes in]
+
+**Flag decisions** (`flagged.md`) — for each queued flag, its outcome:
+> [Promoted to Janmam/checklist (shown in drafts above) / dropped / explicitly deferred — deferred flags stay in the queue, everything decided is removed]
 
 **Stale items to remove** — if any checklist or to-do items are no longer relevant:
 > [What to remove and why]

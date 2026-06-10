@@ -239,82 +239,58 @@ _Pending work as of YYYY-MM-DD HH:MM IST_
 - **Clear when resolved** — if the current session completed everything in a prior NEXT.md, delete the file as part of this step. Don't leave stale resumption notes around to mislead future sessions.
 - **NEXT.md is not history** — once cleared, it's gone. The narrative of what was once pending lives in the daily logs.
 
-## Step 6 — Purvi product sync (optional, user-driven)
+## Step 6 — Purvi pattern flagging (flag only, never write rules)
+
+**The boundary (resolved 10-06-2026):** this automated step only *flags* candidate patterns. It never writes to Janmam, checklist, or sync notes. The dedicated product sync (purvi-sync skill, "Assembly dispersed") is where flagged candidates are reviewed and either promoted to rules or dropped. Flag in passing, decide in person — this prevents unsupervised rule-making and feedback loops.
 
 **Skip this step entirely if:**
-- `/root/Purvi/checklist.md` does not exist (Purvi not set up on this machine)
+- `/root/Purvi/flagged.md` does not exist (Purvi not set up on this machine)
 - The context window is tight (conversation has been compressed or is near limit) — prioritise Steps 1–5 over this step
 
 **Purvi repo path:** `/root/Purvi/` (or the user's configured path). This is a ground truth — each machine has its own path. The skill checks existence, not a hardcoded location.
 
 ### 6a — Assess and ask
 
-Silently scan the session for signals worth syncing:
+Silently scan the session for candidate patterns:
 - Was there a wasted round, a misunderstanding, or a feature built wrong before being corrected?
 - Did a new pattern, principle, or decision emerge from the conversation?
-- Were any existing to-do's from the Purvi sync file addressed?
 
-**If nothing worth noting:** skip the rest of Step 6 entirely. Do not mention Purvi, do not create empty entries, do not comment. Silence means "clean session, nothing to sync."
+**If nothing worth flagging:** skip the rest of Step 6 entirely. Do not mention Purvi, do not comment. Silence means "clean session, nothing to flag."
 
-**If something worth noting:** ask the user conversationally — e.g.:
+**If something worth flagging:** ask the user conversationally — e.g.:
 
-> "This session surfaced [brief description]. Want to run a quick Purvi sync before wrapping?"
+> "This session surfaced [brief description]. Flag it for the next product sync?"
 
 On **no** or no response, skip. On **yes**, proceed to 6b.
 
-### 6b — Sync local copy
+### 6b — Append approved flags and push
 
-Before writing anything, ensure the local Purvi repo is up to date:
+Pull first; if the pull fails (conflict, auth issue), report the error and skip the rest of Step 6. Do not force-push or overwrite.
 
 ```bash
 cd /root/Purvi && git pull --ff-only 2>&1
 ```
 
-If the pull fails (conflict, auth issue), report the error and skip the rest of Step 6. Do not force-push or overwrite.
+Append one line per approved candidate under the `## Queue` section of `/root/Purvi/flagged.md` (replace the `(empty)` placeholder if present):
 
-### 6c — Present findings for review
-
-Read today's sync file if it exists: `/root/Purvi/Product sync/DD-MM-YYYY.md` (date from Step 1, reformatted to DD-MM-YYYY).
-
-Present what you think should be written — **do not write yet.** Show the user:
-
-1. **Sync notes draft** — what you'd add to today's sync file (patterns, decisions, discussion points)
-2. **Janmam draft** (only if a new principle emerged) — the principle in Janmam format (date, "What happened", "The principle", "How to apply")
-3. **Checklist change** (only if a new actionable gate emerged) — the item you'd add and which section
-4. **To-do updates** — any open to-do's from the sync file that were completed this session, and any new to-do's from this session
-
-The user reviews and approves, modifies, or rejects each item. Only write what's approved. If the user says nothing is worth writing, stop — no entries, no commits.
-
-### 6d — Write approved changes and push
-
-Write only the approved items:
-- Sync notes → append to `/root/Purvi/Product sync/DD-MM-YYYY.md` (create if needed, append with `---` separator and `## Sync — HH:MM` subheading if same-day)
-- Janmam → append to `/root/Purvi/Janmam.md`
-- Checklist → edit `/root/Purvi/checklist.md`
-- To-do's → update in today's sync file
+```
+- [ ] DD-MM-YYYY — <candidate pattern in one sentence> (context: <which session/project it came from>)
+```
 
 Then commit and push:
 
 ```bash
-cd /root/Purvi && git add -A && git diff --cached --quiet || (git commit -m "<short summary of sync changes>" && git push)
+cd /root/Purvi && git add -A && git diff --cached --quiet || (git commit -m "Flag: <short candidate summary>" && git push)
 ```
 
-If there are no changes, skip silently. If the push fails, report the error — do not claim success.
-
-### 6e — Clean up stale content
-
-During the same pass, scan for stale items:
-- Checklist items that are no longer relevant or have been superseded → flag to user for removal
-- To-do items that are clearly outdated → flag to user for removal
-
-Do not delete without confirmation. Present what you'd remove and why.
+If the push fails, report the error — do not claim success.
 
 ### What NOT to do in this step
 
-- **Don't write without approval.** No auto-entries to Janmam, checklist, or sync notes. Every write is user-approved.
-- **Don't create noise.** If the session has nothing worth syncing, stay silent. No "no new patterns" entries.
+- **Don't write rules.** No entries to Janmam, checklist, or sync notes from this step — ever. Those are written only inside a dedicated product sync (purvi-sync skill).
+- **Don't flag without approval.** Every flagged.md line is user-approved before it's written.
+- **Don't create noise.** If the session has nothing worth flagging, stay silent.
 - **Don't echo the checklist.** The checklist is an internal assessment tool, not conversation output.
-- **Don't run a full sync loop.** This is not the "Assembly dispersed" pattern — that's a separate, dedicated product sync conversation. This step is a lightweight check at wrap-up. The distinction between automated wrap-up checks and dedicated sync sessions is an open design question.
 - **Don't run the "Before building" or "During building" checklist items** — those are for session start (gain-context), not wrap-up.
 
 ## Confirming before exit

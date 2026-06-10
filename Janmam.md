@@ -97,3 +97,13 @@ The shared repo (Purvi) documents the *principle* — "check what's already in p
 **The principle:** An audit or review finding is a hypothesis, not a fact. Before acting on it, reproduce it against the running system — especially for anything that spans layers (a proxy in front of an app, TLS terminating upstream, a config field that can mean "disabled"). Automated or delegated analysis sees fragments; the truth is in how the layers compose.
 
 **How to apply:** For each finding, reproduce it live before fixing — curl the actual URL, read the actual config, check the actual field value. If a fix's premise can't be reproduced, the finding is suspect. Judge the system, not the file. (Pairs with "Don't assume, always check.")
+
+---
+
+## 10-06-2026 — Flag in passing, decide in person
+
+**What happened:** The automated sync step in update-context and the dedicated product sync had an unresolved boundary — both could plausibly write rules, risking unsupervised rule-making and feedback loops.
+
+**The principle:** Observation and decision are separate roles. Automated processes may *flag* candidate patterns, but only a deliberate human-driven review promotes them to rules. This keeps the rule set intentional and prevents the system from amplifying its own output.
+
+**How to apply:** update-context appends candidates to `flagged.md` (approval still required). purvi-sync surfaces them at the next sync, where each is promoted to Janmam/checklist or dropped.

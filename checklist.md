@@ -17,6 +17,7 @@ Run through this on every product sync and every session wrap-up (update-context
 
 ## After building
 
+- [ ] **Private by default** — New GitHub repos are created private. Going public is an explicit, deliberate decision — never the default.
 - [ ] **Reflection** — What went wrong? What would have caught it earlier? If there's a reusable principle, add it to Janmam.
 - [ ] **Sync notes** — If this session surfaced a new pattern or principle, log it in the Product sync folder.
 

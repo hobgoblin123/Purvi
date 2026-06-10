@@ -107,3 +107,23 @@ The shared repo (Purvi) documents the *principle* — "check what's already in p
 **The principle:** Observation and decision are separate roles. Automated processes may *flag* candidate patterns, but only a deliberate human-driven review promotes them to rules. This keeps the rule set intentional and prevents the system from amplifying its own output.
 
 **How to apply:** update-context appends candidates to `flagged.md` (approval still required). purvi-sync surfaces them at the next sync, where each is promoted to Janmam/checklist or dropped.
+
+---
+
+## 10-06-2026 — Cookieless fetches are part of the logged-out surface
+
+**What happened:** Iris shipped with an unstyled login page — the auth middleware 302'd CSS for anonymous users, and nobody had ever loaded the page logged-out during dev. Tonight's PWA rollout hit the same class proactively: manifest fetches and SW update checks run without cookies, so all three apps got explicit auth exemptions plus logged-out regression tests before deploy.
+
+**The principle:** An auth-gated app still has a logged-out surface: login-page assets, PWA manifests, service workers, icons — anything the browser fetches without a session. That surface must be deliberately public, and deliberately *small*: static app-identity assets only (test: "fine on the front page?"). Anything carrying user data stays gated — if a cookieless client needs data (widgets), use a token guard, never a blanket exemption.
+
+**How to apply:** Whenever adding assets the browser fetches on its own, exempt them explicitly and add a logged-out regression test (assets 200 anonymously, app pages still redirect). Test the logged-out experience with a real browser — authed-dev curl checks never catch it.
+
+---
+
+## 10-06-2026 — Consistency is a feature
+
+**What happened:** Two scales of the same lesson in two days. Across projects: the PWA rollout replicated the iris pattern verbatim in three apps — same file names, manifest shape, SW policy, exemption style. Within an app: iris's widget and dashboard disagreed on streak ordering until both were derived from one rule (`streak_started_at DESC`), and the dashboard's day-0 tickers were reformatted to H:MM:SS so widget and dashboard read identically.
+
+**The principle:** Consistency is itself a capability, at both scales. Across projects, one mental model for N apps means faster sessions, bugs found once are fixed everywhere, and diffs stay reviewable. Within an app, every surface showing the same data must agree — same rule, same ordering, same format. Two surfaces that disagree read as a bug even when both are individually "correct." Divergence is allowed, but it must be a decision, not a drift.
+
+**How to apply:** Before building a capability a sibling project already has, copy its implementation shape and learnings — diverge only with a stated reason. When two surfaces present the same data, derive one shared rule from the user's expected example and apply it to every surface, presentation format included. Match each repo's local conventions when adding code to it.

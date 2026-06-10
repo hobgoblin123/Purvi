@@ -255,6 +255,8 @@ Silently scan the session for candidate patterns:
 - Was there a wasted round, a misunderstanding, or a feature built wrong before being corrected?
 - Did a new pattern, principle, or decision emerge from the conversation?
 
+**Dedupe before asking:** skim the entry headings in `/root/Purvi/Janmam.md` (and the existing `flagged.md` queue). If the candidate is already captured as a principle or already queued, don't flag it — repeat flags dilute the queue and breed approval fatigue.
+
 **If nothing worth flagging:** skip the rest of Step 6 entirely. Do not mention Purvi, do not comment. Silence means "clean session, nothing to flag."
 
 **If something worth flagging:** ask the user conversationally — e.g.:

@@ -34,6 +34,12 @@ Check the most recent sync file for open to-do items (`- [ ]` lines), and `flagg
 
 > "Open from last sync: [list items]. Flagged since then: [list flags]. Want to review these first?"
 
+**Watchdog — empty queue is not always good news.** If the flag queue is empty, count the daily logs in `/root/claude_context/` dated after the most recent sync file. If several sessions happened but nothing was flagged, say so explicitly instead of staying silent:
+
+> "No flags, but N sessions since last sync — either they were all clean or flagging didn't run."
+
+This exists because the loop's failure mode (flagging silently not running) looks identical to its success mode (clean sessions). Surfacing the gap turns an invisible failure into a visible question.
+
 Every flagged pattern must be decided during this sync — promoted to Janmam/checklist or dropped — unless the user explicitly defers it. Don't force the ordering, though — if the user has something else to discuss, follow their lead and return to the flags before closing.
 
 ### 3 — Tell the user you're ready

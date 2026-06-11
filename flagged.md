@@ -8,4 +8,4 @@ Format: `- [ ] DD-MM-YYYY — <candidate pattern in one sentence> (context: <whi
 
 ## Queue
 
-(empty)
+- [ ] 11-06-2026 — An "already handled, stay silent" check must scope its lookback window to the specific obligation it guards — "any activity since the last checkpoint" silences the wrong things (context: iris dose reminders; a late morning dose would have muted the evening slot, fixed with per-slot cyclic-midpoint windows)

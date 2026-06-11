@@ -14,9 +14,13 @@ Run through this on every product sync and every session wrap-up (update-context
 - [ ] **Mobile first** — Design and test for mobile before desktop. Not as an afterthought, as the default.
 - [ ] **Can you see it?** — If you can't visually verify a UI change, say so. Don't declare it done.
 - [ ] **Diagnose before redesigning** — When something looks wrong, ask what specifically is broken before changing the approach.
+- [ ] **Check against the running system before acting** — Reproduce a finding live, confirm a tool fits the real environment, verify the actual value — *before* acting on it. Never act on an assumption or an unverified report. (Enforces "Don't assume, always check" + "Verify findings before acting".)
+- [ ] **Shared-infra blast radius** — When a change alters how many requests a page makes, adds same-origin assets, or shifts load, check it against shared limits before deploying — nginx rate-limit zones, cgroup CPU/memory caps. Correct in isolation can still break a neighbour.
 
 ## After building
 
+- [ ] **Verify end-to-end as the real user/role** — Exercise the actual flow as the unprivileged service user and in a real client (browser/device) — not as root, not unit tests alone. Root masks permission bugs; tests miss integration. If you built the same capability across several services, diff the instances (secret/file ownership, service user, cron user, paths) — divergence is a bug unless deliberate. (Enforces "Consistency is a feature".)
+- [ ] **Test the logged-out path** — For any auth-gated change, load it with no session (incognito/real browser) and keep browser-fetched assets public (manifest, service worker, fonts, icons). (Enforces "Cookieless logged-out surface".)
 - [ ] **Private by default** — New GitHub repos are created private. Going public is an explicit, deliberate decision — never the default.
 - [ ] **Reflection** — What went wrong? What would have caught it earlier? If there's a reusable principle, add it to Janmam.
 - [ ] **Sync notes** — If this session surfaced a new pattern or principle, log it in the Product sync folder.

@@ -110,6 +110,28 @@ The shared repo (Purvi) documents the *principle* — "check what's already in p
 
 ---
 
+## 11-06-2026 — Verify end-to-end as the real user/role
+
+**What happened:** Built the same Web Push pipeline for three apps. On cycle the VAPID key was generated as root while the service runs as user `cycle`, so the key was unreadable → the enrol endpoint 500'd → "Setup failed" on Nithin's phone. It stayed invisible because I only tested key *generation* (as root, which can read anything) and the backend unit tests — never the actual enrol flow as the service user or in a real browser. The same build also diverged across the three (cron as root vs app user, key ownership) — a direct violation of "Consistency is a feature" the day after it was written.
+
+**The principle:** "Tests pass" and "it works" are different claims. A feature with auth, file permissions, or multiple surfaces is only verified when exercised through its real path — as the unprivileged service user, in a real client — not as root and not by unit tests alone. Root reads every file, so it masks exactly the permission bugs that bite in production. And when you build one capability N times, the instances must match; divergence is where the bugs hide.
+
+**Why a gate, not just a principle:** "Consistency is a feature" already existed as a principle and I violated it the next day — proof that a principle without an enforcement step gets ignored. The lesson became a checklist gate ("Verify end-to-end as the real user/role"), because the gate is what forces the check. When a principle keeps getting violated, the fix is a gate.
+
+**How to apply:** Before calling done — run the real flow as the service user (`sudo -u <app> …`) and in a real browser/device; if built across services, diff ownership/service-user/cron-user/paths. Corollary: when you find one instance of a bug, audit the whole class immediately (the cycle key fix surfaced the cron-user and stray-test-data issues across the other pipelines). Pairs with [[verify findings before acting]] and "Consistency is a feature".
+
+---
+
+## 11-06-2026 — A change's blast radius includes shared infrastructure
+
+**What happened:** Self-hosting cycle's fonts + Chart.js (to make the PWA work offline) took a page load from ~10 same-origin requests to ~16. Those assets used to load from Google/jsdelivr — cross-origin, so they never counted against our nginx rate limit. Same-origin now, they do. A cold load exceeded the `api` zone's `burst=10` and nginx 429'd the dashboard API call, which returned an HTML error page → `res.json()` threw → the app showed no data. The change was correct in isolation; it broke through shared infrastructure.
+
+**The principle:** A change isn't scoped to the file you edited. Anything that alters request count, request paths, or resource load lands on shared infrastructure — rate-limit zones, CPU/memory cgroups, connection pools — that other features and other apps also depend on. Reason about the change at the level of the shared resource, not just the component.
+
+**How to apply:** When a change adds same-origin assets, changes how many requests a page fires, or shifts load, check it against the shared limits before deploying (nginx `limit_req` zones/burst, cgroup caps). Rate limits belong on the API, never the static catch-all — and a 429/500 returning HTML reads to the client as "no data," not "rate limited," so it hides as a different bug.
+
+---
+
 ## 10-06-2026 — Cookieless fetches are part of the logged-out surface
 
 **What happened:** Iris shipped with an unstyled login page — the auth middleware 302'd CSS for anonymous users, and nobody had ever loaded the page logged-out during dev. Tonight's PWA rollout hit the same class proactively: manifest fetches and SW update checks run without cookies, so all three apps got explicit auth exemptions plus logged-out regression tests before deploy.

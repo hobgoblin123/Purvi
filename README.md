@@ -131,9 +131,39 @@ Example structure:
 
 The relationship between Purvi and ground truths is the same as code to `.env`: the code says "read the config from the environment"; the `.env` says what the config actually is on *this* machine.
 
+## Starting work under Purvi
+
+Purvi activates through your session-start skill — but the flow differs for existing vs brand-new projects.
+
+### Existing project
+
+Say **"gain context"** (or "Start Session"). The session-start skill loads everything in one pass:
+
+1. The project's context README (durable project knowledge)
+2. Local ground truths (machine-specific facts)
+3. `Purvi/checklist.md` — the gates, including the tool gates: ponytail's **minimal-code ladder** ("During building") and graphify's **graph-first ground-truth check** ("Before building")
+
+No per-project setup is needed for the tools themselves: ponytail is installed once as a plugin and applies everywhere; graphify kicks in automatically wherever a `graphify-out/` knowledge graph exists — codebase questions route through the graph instead of re-exploring files.
+
+### New project
+
+There's no context to load yet, so activation is a bootstrap sequence:
+
+1. **Spec it in a product sync** (purvi-sync skill). What is it, what new value does it add, what are its constraints and design rules? The sync notes become the project's first product record — this is where "Value check" and "Design-rule tension check" run for the very first time, before any code exists.
+2. **Start building under the gates.** The checklist loads at session start regardless of project age — "gain context" works from session one (the checklist doesn't depend on a project README existing). Ponytail's ladder applies from the first line of code.
+3. **Create the project context at first wrap-up.** The session wrap-up skill (update-context) offers to create the project's context folder/README on first use. From then on, "gain context <project>" resolves it like any existing project.
+4. **Build the knowledge graph once there's code to map.** Run `/graphify .` in the project root. From that point the Ground-truth gate queries the graph (`graphify query "<question>"`) instead of grepping, and keeps it fresh with `/graphify . --update`. **Keep `graphify-out/` local** — add it to the project's `.gitignore`. The graph is a derived artifact that can embed environment facts (paths, service names, doc excerpts), and it regenerates on demand; like ground truths, it belongs to the machine, not the shared repo.
+
+The loop after bootstrap is the same as for existing projects: sync to spec → "gain context" to build under the gates → wrap-up flags patterns → next sync refines the rules.
+
 ## Dependencies
 
 The `Dependencies/skills/` folder contains reference snapshots of skills that Purvi integrates with. These are copies — the live versions evolve independently. Use them to understand how Purvi hooks into a session lifecycle, then adapt to your own setup.
+
+Beyond the session-lifecycle skills, two external tools are part of the toolkit (snapshots in the same folder):
+
+- **ponytail** ([DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail)) — code minimalism. Enforcement arm of the "Minimal-code ladder" gate: Purvi decides *whether* to build; ponytail keeps *what gets built* minimal. See `Dependencies/skills/ponytail.md` for the ladder and the local overrides.
+- **graphify** ([safishamsi/graphify](https://github.com/safishamsi/graphify)) — knowledge graphs. Enforcement arm of the "Ground truth check" gate: when a project has a `graphify-out/` graph, query it before re-exploring. See `Dependencies/skills/graphify.md`.
 
 ## Status
 

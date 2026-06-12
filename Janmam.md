@@ -149,3 +149,33 @@ The shared repo (Purvi) documents the *principle* — "check what's already in p
 **The principle:** Consistency is itself a capability, at both scales. Across projects, one mental model for N apps means faster sessions, bugs found once are fixed everywhere, and diffs stay reviewable. Within an app, every surface showing the same data must agree — same rule, same ordering, same format. Two surfaces that disagree read as a bug even when both are individually "correct." Divergence is allowed, but it must be a decision, not a drift.
 
 **How to apply:** Before building a capability a sibling project already has, copy its implementation shape and learnings — diverge only with a stated reason. When two surfaces present the same data, derive one shared rule from the user's expected example and apply it to every surface, presentation format included. Match each repo's local conventions when adding code to it.
+
+---
+
+## 12-06-2026 — Scope silencing checks to the obligation they guard
+
+**What happened:** Iris dose reminders. The "already handled, stay silent" check looked back at *any activity since the last checkpoint* — so a late-morning dose would have wrongly muted the evening reminder slot. Fixed with per-slot cyclic-midpoint windows.
+
+**The principle:** A suppression/dedup check guards a *specific obligation*. Its lookback window must be derived from that obligation — per slot, per event, per resource — never from general recent activity. "Anything happened recently" silences the wrong things.
+
+**How to apply:** When writing any "skip if already done" logic, name the exact obligation being guarded and scope the window to it. If one check guards N obligations, it needs N windows.
+
+---
+
+## 12-06-2026 — Surface design-rule tensions before building
+
+**What happened:** finance_sheet. A miscategorisation-badge idea conflicted with the established "no dashboard info icons" rule. Naming the conflict explicitly produced a third option — an entry-time warning — cleaner than either silently following the rule or silently breaking it.
+
+**The principle:** When a new feature idea conflicts with the user's own established design rule, surface the tension explicitly before building. A conscious override or a redesign both beat silently picking a side — and the named conflict often yields a better third design.
+
+**How to apply:** Before building, check the idea against the project's stated design rules. On conflict, present it: "this conflicts with X — override it, or rethink the feature?" Never resolve it silently.
+
+---
+
+## 12-06-2026 — Two-sided aggregations take a stance on both sides
+
+**What happened:** finance_sheet. Card exposure summed expenses only and ignored refund income, while Salary Spend netted it — Net Position sat ₹1,700 low. The expenses-only sum was a latent bug until the first credit appeared in real data.
+
+**The principle:** Every aggregation over a two-sided ledger (income/expenses, credit/debit) must take an explicit stance on how it treats each side. And when a new entry kind appears in real data, audit *every* calculation path that consumes it — the first instance reveals which paths never decided.
+
+**How to apply:** For each aggregate, state the stance ("gross expenses", "net of refunds") rather than letting the query imply it. New entry kind in real data → enumerate and audit all consumers.

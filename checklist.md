@@ -4,10 +4,11 @@ Run through this on every product sync and every session wrap-up (update-context
 
 ## Before building
 
-- [ ] **Ground truth check** — Before setting up, connecting, or configuring anything, check what's already in place. Before moving on from a discovery, write it down. If it's ambiguous, don't send it. Ground truths are environment-specific — store them in the local skills database, not in shared repos.
+- [ ] **Ground truth check** — Before setting up, connecting, or configuring anything, check what's already in place. Before moving on from a discovery, write it down. If it's ambiguous, don't send it. Ground truths are environment-specific — store them in the local skills database, not in shared repos. If a graphify knowledge graph exists (`graphify-out/`), query it before grepping or re-exploring.
 - [ ] **Value check** — Does this add a new capability? If it already exists somewhere, you're misunderstanding the ask.
 - [ ] **One clarifying question** — State what you think the user wants in one sentence. If you're not sure, ask before writing code.
 - [ ] **"I like X" = the pattern, not the scope** — When someone references an existing feature, they mean the interaction model, not "clone it."
+- [ ] **Design-rule tension check** — Does this idea conflict with an established design rule? If yes, surface the tension explicitly before building — conscious override or redesign, never silent. (Enforces "Surface design-rule tensions before building".)
 
 ## During building
 
@@ -16,6 +17,8 @@ Run through this on every product sync and every session wrap-up (update-context
 - [ ] **Diagnose before redesigning** — When something looks wrong, ask what specifically is broken before changing the approach.
 - [ ] **Check against the running system before acting** — Reproduce a finding live, confirm a tool fits the real environment, verify the actual value — *before* acting on it. Never act on an assumption or an unverified report. (Enforces "Don't assume, always check" + "Verify findings before acting".)
 - [ ] **Shared-infra blast radius** — When a change alters how many requests a page makes, adds same-origin assets, or shifts load, check it against shared limits before deploying — nginx rate-limit zones, cgroup CPU/memory caps. Correct in isolation can still break a neighbour.
+- [ ] **Both sides of the ledger** — Any aggregation over two-sided data (income/expenses, credit/debit) states explicitly how each side is treated. When a new entry kind appears in real data, audit every calculation path that consumes it. (Enforces "Two-sided aggregations take a stance on both sides".)
+- [ ] **Minimal-code ladder (ponytail)** — Before writing code, walk the ladder: does it need to exist? → stdlib? → native platform feature? → already installed? → one line? → only then minimal code. Local overrides: stable external deps are fine (the ladder orders where to look, it doesn't ban libraries), and the ladder governs *what* gets written, never the process — TDD still applies.
 
 ## After building
 

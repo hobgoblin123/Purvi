@@ -16,7 +16,7 @@ That's what Purvi does. It's a set of principles and checklists — born from re
 
 ## How it works
 
-Purvi has three parts:
+Purvi has four parts:
 
 ### 1. Checklist (`checklist.md`)
 
@@ -32,17 +32,21 @@ A running list of principles. Each one traces back to a real conversation where 
 
 For example: *"If someone says 'I like how X works,' they mean the interaction style, not 'build an exact copy of X.'"* That came from a real session where the AI cloned a 3-field edit form when the user wanted a full 7-field editor.
 
-### 3. Product sync notes (`Product sync/`)
+### 3. Flagged patterns (`flagged.md`)
+
+A queue, not a rulebook. Automated session wrap-ups may *flag* candidate patterns here, but nothing becomes a rule until a deliberate, human-driven product sync promotes it. **Flag in passing, decide in person** — this keeps the rule set intentional and stops the system from amplifying its own output. Every sync empties the queue: each flag is promoted (to Janmam, plus a checklist gate if actionable) or dropped.
+
+### 4. Product sync notes (`Product sync/`)
 
 Dated notes from product conversations. This is where new principles are born. The pattern looks like this:
 
 1. Something goes wrong during a build
 2. The user asks: "What could you do better next time?"
-3. The reflection produces a principle
-4. The principle goes into Janmam
-5. If it's actionable, it becomes a checklist item
+3. The wrap-up flags the candidate pattern into `flagged.md`
+4. At the next product sync, the flag is reviewed — promoted into Janmam, or dropped
+5. If it's actionable, it also becomes a checklist gate — a principle that keeps getting violated *must* become a gate; enforcement beats intention
 
-The sync notes are the raw material. Janmam is the refined output. The checklist is the daily tool.
+The sync notes are the raw material. Janmam is the refined output. The checklist is the daily tool. (`Dependencies/skills/purvi-sync.md` describes how a sync conversation runs; `Product sync/instructions.md` covers the note-file conventions.)
 
 ## Why "token prioritization"?
 
@@ -77,7 +81,7 @@ Your AI assistant needs to load `checklist.md` at the start of every session. Ho
 
 When you finish a session, the checklist's "After building" and "Wrapping a sync" sections should run. This is where reflection happens — did something go wrong? Is there a principle worth capturing?
 
-**Claude Code** — Edit your `update-context` skill to add a step before the final confirmation that reads `~/Purvi/checklist.md` and checks the "After building" items. See `Dependencies/skills/update-context.md` for a reference implementation (look for "Step 6 — Purvi product checklist").
+**Claude Code** — Edit your `update-context` skill to add a step before the final confirmation that reads `~/Purvi/checklist.md`, checks the "After building" items, and flags candidate patterns into `flagged.md` (never writing rules directly). See `Dependencies/skills/update-context.md` for a reference implementation (look for "Step 6 — Purvi pattern flagging").
 
 **Other LLMs** — Add a wrap-up rule: "Before closing, check `~/Purvi/checklist.md` 'After building' section. Flag anything relevant."
 
@@ -87,16 +91,25 @@ The loop works like this:
 
 1. **Start a session** → checklist loads → you build with the right lens
 2. **Something goes wrong** → you ask "what could you do better next time?"
-3. **The reflection produces a principle** → add it to `Janmam.md`
-4. **If it's actionable** → add it to `checklist.md`
-5. **Wrap up** → the checklist catches anything you missed
-6. **Next session** → the improved checklist loads → repeat
+3. **Wrap up** → the checklist catches anything you missed; candidate patterns get flagged into `flagged.md` (flag only — no rule-writing outside a sync)
+4. **Next product sync** → each flag is promoted to `Janmam.md` (plus a `checklist.md` gate if actionable) or dropped, until the queue is empty
+5. **Next session** → the improved checklist loads → repeat
 
-Run product syncs (`Product sync/` folder) periodically to capture patterns from multiple sessions. The sync notes are the raw material; Janmam is the distilled output.
+Run product syncs (`Product sync/` folder) periodically — and *before spec'ing any new feature or project*, not just retrospectively. The sync notes are the raw material; Janmam is the distilled output. One watchdog worth keeping: if several sessions pass with an empty flag queue, say so out loud — silent flagging failure looks identical to clean sessions.
 
 ### Step 5 — Make it yours
 
 Purvi is a starting point, not a prescription. The principles in Janmam came from one person's workflow — yours will be different. Delete what doesn't apply, add what does. The structure (checklist → principles → sync notes → feedback loop) is the valuable part, not the specific entries.
+
+## Using Purvi with another LLM
+
+Short answer: yes — point any capable LLM at this repo and the principles work immediately. The longer answer is that Purvi has three layers with different portability:
+
+1. **The principles and gates (`checklist.md`, `Janmam.md`) — fully portable.** They're plain markdown. Paste them into custom instructions, a system prompt, a `GEMINI.md`/`AGENTS.md`, or just say "read checklist.md and Janmam.md from this repo and apply the gates to everything we build." No tooling required.
+2. **The feedback loop (flagging, syncs) — portable as a protocol.** `Dependencies/skills/purvi-sync.md` describes how a sync conversation runs (load context → surface flags → user drives → all writes approved → queue emptied); any LLM can follow it conversationally. The automation (auto-loading at session start, auto-flagging at wrap-up) needs whatever your platform offers — Claude Code uses skills (reference implementations in `Dependencies/skills/`), other tools use rules files or custom instructions. Worst case, you load the checklist manually at session start; the loop still works, just with more discipline on your side.
+3. **The tool pair — ships its own multi-platform support.** ponytail provides rules files for Cursor, Windsurf, Cline, Copilot, and Aider in its repo; graphify supports 15+ assistants. Install per their docs and the "Minimal-code ladder" and graph-first ground-truth gates apply unchanged.
+
+What does *not* port: your ground truths file (machine-specific by design — recreate per environment) and the `Dependencies/skills/` snapshots (Claude Code reference implementations — read them for the *pattern*, not to run them elsewhere).
 
 ## Ground truths — your `.env` file
 

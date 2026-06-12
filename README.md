@@ -145,6 +145,8 @@ Say **"gain context"** (or "Start Session"). The session-start skill loads every
 
 No per-project setup is needed for the tools themselves: ponytail is installed once as a plugin and applies everywhere; graphify kicks in automatically wherever a `graphify-out/` knowledge graph exists — codebase questions route through the graph instead of re-exploring files.
 
+**Spec'ing a new feature? Start a sync first.** Before building anything non-trivial on an existing product, run a product sync (purvi-sync skill) to spec it: what new value it adds, which existing design rules it touches, what the constraints are. This is where the full toolkit engages in the right order — the sync runs "Value check" and "Design-rule tension check" against the product's principles, graphify answers "what already exists" from the knowledge graph, and the build session that follows applies ponytail's ladder to what survives the spec. Skipping the sync means the gates only catch problems mid-build, when they're expensive; the sync catches them before a line of code exists.
+
 ### New project
 
 There's no context to load yet, so activation is a bootstrap sequence:

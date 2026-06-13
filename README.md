@@ -111,6 +111,22 @@ Short answer: yes — point any capable LLM at this repo and the principles work
 
 What does *not* port: your ground truths file (machine-specific by design — recreate per environment) and the `Dependencies/skills/` snapshots (Claude Code reference implementations — read them for the *pattern*, not to run them elsewhere).
 
+### Going further: full cross-LLM continuity on one machine
+
+If you run multiple LLMs on the same server (e.g. Claude Code for one session, Codex or Gemini CLI for the next), you can make handoffs seamless by building a **project map** — a single markdown file that any LLM reads cold and gets the full picture. Here's what we built for our setup (adapt paths to yours):
+
+1. **`PROJECT_MAP.md`** — a master pointer file listing every project (path, GitHub repo, knowledge-graph stats), every context source (ground truths, project handbooks, daily logs, resumption notes, graphs, Purvi gates), and a numbered "Start here" sequence. An LLM reads this one file and knows where everything lives.
+
+2. **`PREFERENCES.md`** — your working style, communication rules, and building constraints, extracted from whatever memory/preference system your primary LLM uses. This makes your preferences portable: Claude knows them from its memory; Codex learns them from this file.
+
+3. **In-flight handoff via `NEXT.md`** — the session wrap-up skill writes a resumption checklist to `<project>/NEXT.md` when work is left mid-stream. The next LLM (any platform) reads it and picks up exactly where the last session stopped.
+
+4. **Shared knowledge graphs** — `graphify-out/` in each project root. Any LLM on the same machine can query them directly (`graphify query "..."`) instead of re-exploring the codebase from scratch.
+
+5. **Auto-maintenance** — the session wrap-up skill (reference: `Dependencies/skills/update-context.md`, Step 7) checks both the project map and the preferences file on every wrap-up, updating stale rows and adding new feedback. This keeps the handoff documents current without manual effort.
+
+Put the map and preferences file somewhere that syncs across your devices (we use a Syncthing folder) so you have a copy even if the server is down. The map points at everything; the files it points at do the real work. The key insight: Purvi's principles and gates are the shared layer (this repo), but the *operational glue* — where things live, who you are, what's in flight — lives in these local documents that any LLM can read.
+
 ## Ground truths — your `.env` file
 
 Ground truths are device-specific operational facts: auth paths, service configs, credential locations, installed tools, port numbers. They're the equivalent of a `.env` file — local to the machine, never committed to a shared repo.

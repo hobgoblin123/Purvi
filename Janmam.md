@@ -179,3 +179,15 @@ The shared repo (Purvi) documents the *principle* — "check what's already in p
 **The principle:** Every aggregation over a two-sided ledger (income/expenses, credit/debit) must take an explicit stance on how it treats each side. And when a new entry kind appears in real data, audit *every* calculation path that consumes it — the first instance reveals which paths never decided.
 
 **How to apply:** For each aggregate, state the stance ("gross expenses", "net of refunds") rather than letting the query imply it. New entry kind in real data → enumerate and audit all consumers.
+
+---
+
+## 13-06-2026 — Same data, same display across every surface
+
+**What happened:** Iris count-ups. The dashboard card switched from a live H:MM:SS ticker to "1 Day" at IST midnight (checking `streak_days === 0`). The detail view showed "17h 32m" (computed from elapsed milliseconds). Both individually correct — but a user seeing "1 Day" on the card and "17h" inside reads it as a bug. "Consistency is a feature" already said "every surface showing the same data must agree" — the principle existed for three days. No gate enforced it at the display level.
+
+**The principle:** When a value appears on multiple surfaces (dashboard card, detail view, widget, push notification), the computation and format must be shared or proven equivalent. "Individually correct" is not "consistent" — the user sees the *disagreement*, not the justifications. This is [[consistency-is-a-feature]] applied specifically to display logic, where it's easiest to miss because each view is built in isolation.
+
+**Why a gate, not just a principle:** "Consistency is a feature" already covered this in theory. The sub-24h bug proved that a broad principle doesn't prevent narrow display-logic drift — each view was written at a different time with a different threshold (`streak_days === 0` vs elapsed ms). The gate forces the explicit check: enumerate surfaces, verify they agree.
+
+**How to apply:** When building or changing how a value is displayed, enumerate every surface that shows it — cards, detail, widgets, notifications. Verify they use the same computation (or call the same function). If they diverge, it's a bug unless the divergence is stated. Pairs with [[consistency-is-a-feature]] and [[verify-end-to-end]].

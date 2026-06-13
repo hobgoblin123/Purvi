@@ -20,6 +20,7 @@ Run through this on every product sync and every session wrap-up (update-context
 - [ ] **Both sides of the ledger** — Any aggregation over two-sided data (income/expenses, credit/debit) states explicitly how each side is treated. When a new entry kind appears in real data, audit every calculation path that consumes it. (Enforces "Two-sided aggregations take a stance on both sides".)
 - [ ] **Same data, same display** — When building or changing how a value is displayed, enumerate every surface that shows it (cards, detail, widgets, notifications). Verify they use the same computation and format. Divergence between surfaces reads as a bug — if it's intentional, state why. (Enforces "Same data, same display across every surface".)
 - [ ] **Minimal-code ladder (ponytail)** — Before writing code, walk the ladder: does it need to exist? → stdlib? → native platform feature? → already installed? → one line? → only then minimal code. Local overrides: stable external deps are fine (the ladder orders where to look, it doesn't ban libraries), and the ladder governs *what* gets written, never the process — TDD still applies.
+- [ ] **Defer what isn't visible** — If a component or chunk isn't needed on first render, lazy-load it. Don't bundle on-demand views (overlays, drilldowns, settings) into the initial payload. The cost of a feature the user *might* open should not be paid by every page load.
 
 ## After building
 

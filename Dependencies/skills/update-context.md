@@ -295,6 +295,24 @@ If the push fails, report the error — do not claim success.
 - **Don't echo the checklist.** The checklist is an internal assessment tool, not conversation output.
 - **Don't run the "Before building" or "During building" checklist items** — those are for session start (gain-context), not wrap-up.
 
+## Step 7 — Update the Project Map
+
+**File:** `/root/python_scripts/PROJECT_MAP.md`
+
+This is the master pointer file in the Syncthing folder — it tells any LLM (including other assistants running on this same server) where every project lives, what it is, and how to use its knowledge graph. It must stay current.
+
+**Skip this step if:** the file doesn't exist (Syncthing folder not set up), or the session made no changes that affect the map (no new projects, no project description changes, no new graphs built, no repo moves).
+
+**What to check and update:**
+1. **Projects table** — if a new project was created this session, add a row. If a project's description, path, or GitHub repo changed, update it. If a knowledge graph was built or rebuilt, update the node/community counts.
+2. **Skills & tools section** — if a new skill was added or an existing one was renamed/removed, reflect it.
+3. **"What does NOT travel" section** — if the session revealed a new category of machine-local content, add it.
+4. **Last-updated date** in the subtitle — update to today's date.
+
+**How to update:** read the file, edit only the stale parts (reconcile, don't rewrite — same as Step 0). Do not touch sections that are already accurate.
+
+**Do not:** rewrite the whole file, add session narrative (that's the daily log's job), or add project-specific operational details (those belong in `project-context/`).
+
 ## Confirming before exit
 
 After all updates, send a brief summary to the user listing:

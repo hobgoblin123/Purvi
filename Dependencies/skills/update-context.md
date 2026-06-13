@@ -295,19 +295,32 @@ If the push fails, report the error — do not claim success.
 - **Don't echo the checklist.** The checklist is an internal assessment tool, not conversation output.
 - **Don't run the "Before building" or "During building" checklist items** — those are for session start (gain-context), not wrap-up.
 
-## Step 7 — Update the Project Map
+## Step 7 — Update the Project Map and Preferences
 
-**File:** `/root/python_scripts/PROJECT_MAP.md`
+Two files in the Syncthing folder (`/root/python_scripts/`) enable cross-platform and cross-LLM continuity. Both sync to Nithin's Mac automatically. Keep them current so any LLM on any machine can pick up where this session left off.
 
-This is the master pointer file in the Syncthing folder — it tells any LLM (including other assistants running on this same server) where every project lives, what it is, and how to use its knowledge graph. It must stay current.
+**Skip this step if:** the files don't exist (Syncthing folder not set up), or the session made no changes that affect either file.
 
-**Skip this step if:** the file doesn't exist (Syncthing folder not set up), or the session made no changes that affect the map (no new projects, no project description changes, no new graphs built, no repo moves).
+### 7a — Project Map (`/root/python_scripts/PROJECT_MAP.md`)
+
+The master pointer — where every project lives, what it is, how to use its knowledge graph, and how to find the full context system.
 
 **What to check and update:**
 1. **Projects table** — if a new project was created this session, add a row. If a project's description, path, or GitHub repo changed, update it. If a knowledge graph was built or rebuilt, update the node/community counts.
-2. **Skills & tools section** — if a new skill was added or an existing one was renamed/removed, reflect it.
-3. **"What does NOT travel" section** — if the session revealed a new category of machine-local content, add it.
+2. **Context system table** — if a new context source was added (e.g. a new type of resumption file), add it.
+3. **Skills & tools section** — if a new skill was added or an existing one was renamed/removed, reflect it.
 4. **Last-updated date** in the subtitle — update to today's date.
+
+### 7b — Preferences (`/root/python_scripts/PREFERENCES.md`)
+
+Nithin's working style, communication rules, and building constraints — extracted from Claude's memory so other LLMs can apply the same standards.
+
+**What to check and update:**
+1. If Nithin gave new feedback this session (a correction, a "don't do X", a "yes that's the right approach"), check whether it's already in PREFERENCES.md. If not, add it to the relevant section.
+2. If an existing preference was revised or contradicted, update in place.
+3. Don't add project-specific details — those belong in the project README.
+
+### For both files
 
 **How to update:** read the file, edit only the stale parts (reconcile, don't rewrite — same as Step 0). Do not touch sections that are already accurate.
 

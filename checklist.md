@@ -13,7 +13,7 @@ Run through this on every product sync and every session wrap-up (update-context
 
 ## During building
 
-- [ ] **Mobile first** — Design and test for mobile before desktop. Not as an afterthought, as the default.
+- [ ] **Mobile first, both must work** — Design for mobile first, but verify it holds on desktop too. Responsive means neither breaks — check layout, wrapping, overflow, and spacing at both ends. Mobile first is the order of design, not permission to ignore the other.
 - [ ] **Can you see it?** — If you can't visually verify a UI change, say so. Don't declare it done.
 - [ ] **Diagnose before redesigning** — When something looks wrong, ask what specifically is broken before changing the approach.
 - [ ] **Check against the running system before acting** — Reproduce a finding live, confirm a tool fits the real environment, verify the actual value — *before* acting on it. Never act on an assumption or an unverified report. (Enforces "Don't assume, always check" + "Verify findings before acting".)
